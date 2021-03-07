@@ -44,14 +44,12 @@ export class AppComponent implements OnInit {
   }
 
   onInputCleared() {
-
     if (this.movieRatingFilteredLevel) {
       this.getMoviesList('ratings', this.movieRatingFilteredLevel)
     } else {
       this.getMoviesList('movies', 0);
     }
     this.close()
-
     this.genreFilteredName = null;
   }
 
@@ -62,17 +60,6 @@ export class AppComponent implements OnInit {
     // e.stopPropagation();
     this.auto.close();
   }
-  focus(e): void {
-    // 
-    // e.keyword = ''
-    // e.stopPropagation();
-
-  }
-  onFocused(event) {
-    // 
-    // this.focus(event)
-  }
-
   rateLeave() {
     this.getMoviesList("movies", 0);
   }
@@ -89,6 +76,7 @@ export class AppComponent implements OnInit {
     this.ratingFilteredMovies = [];
     // Iterate over movies list
     for (const [i, v] of this.filmArray.entries()) {
+      //Round up the decimal rating to nearest single
       if (this.filmArray[i].vote_average.toFixed(0) == ratingValue) {
         this.ratingFilteredMovies.push(this.filmArray[i]);
       }
@@ -96,7 +84,6 @@ export class AppComponent implements OnInit {
     // Set model to filtered movies
     this.filmArray = this.ratingFilteredMovies;
   }
-
   resetRatingsFilter() {
     this.rate = 0;
     this.movieRatingFilteredLevel = null;
@@ -109,7 +96,6 @@ export class AppComponent implements OnInit {
     this.movieRatingFilteredLevel = null;
     this.genreTerm = null;
   }
-
   getGenres(genres, id) {
     return genres
       .filter(function (obj) {
@@ -119,7 +105,6 @@ export class AppComponent implements OnInit {
         return obj.name;
       });
   }
-
   populateGenres(data) {
     this.genresV = data;
   }
@@ -159,8 +144,6 @@ export class AppComponent implements OnInit {
         this.populateMovies(data, type, ratingValue)
       )
   }
-
-
   ngOnInit() {
     // Make call to load the Genres
     this.getGenresList()
