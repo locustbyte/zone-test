@@ -322,6 +322,11 @@ h4 {
         -moz-box-shadow: inset 0px 0px 0px 2px #000;
         box-shadow: inset 0px 0px 0px 2px #000;
         background: rgb(63, 130, 245);
+        border-radius: 30px;
+        .title-header {
+          border-top-left-radius: 20px;
+          border-top-right-radius: 20px;
+        }
       }
       .list-group-item {
         padding: 0;
