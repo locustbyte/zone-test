@@ -1,0 +1,155 @@
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+  <div id="logo"><a href="/" title="Zone">Zone</a></div>
+  <span class="page-title">Movie Listings</span>
+</div>
+
+<!-- Content -->
+<div class="content" role="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 left-side">
+        <p class="search-title m-t-10">Keyword Search</p>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search Anything"
+            [(ngModel)]="genreTerm"
+          />
+          <p class="p-info m-t-10">
+            The above will keyword search across any element of data on the
+            movie.
+          </p>
+        </div>
+
+        <p class="search-title m-t-10">Search by Genre</p>
+        <div class="">
+          <ng-autocomplete
+            #auto
+            [data]="genresV"
+            [searchKeyword]="keyword"
+            (selected)="selectEvent($event)"
+            (inputChanged)="onChangeSearch($event)"
+            (inputFocused)="onFocused($event)"
+            (inputCleared)="onInputCleared()"
+            id="tango"
+            placeholder="All"
+            [itemTemplate]="itemTemplate"
+            [notFoundTemplate]="notFoundTemplate"
+          >
+          </ng-autocomplete>
+          <p class="p-info m-t-10">
+            Begin typing your favourite genre to filter the movies.
+          </p>
+
+          <ng-template #itemTemplate let-item>
+            <a [innerHTML]="item.name"></a>
+          </ng-template>
+
+          <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="notFound"></div>
+          </ng-template>
+        </div>
+        <p class="search-title m-t-10 p-b-0">Search by Ratings</p>
+        <bar-rating
+          [(rate)]="rate"
+          [theme]="'stars'"
+          (rateChange)="rateChg($event, 'ratings')"
+          [max]="10"
+        ></bar-rating>
+        <p class="p-info m-t-20">Filter movies based on the ratings</p>
+        <!-- <p class="search-title m-t-10 p-b-0">Or</p>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Enter rating value manually"
+            [(ngModel)]="genreTerm"
+          />
+          <p class="p-info m-t-10">
+            The above will filter movies on the rating you enter. 0.0 - 10.0
+          </p>
+        </div> -->
+
+        <button
+          [ngClass]="{
+            'btn-danger': movieRatingFilteredLevel,
+            'btn-dark': !movieRatingFilteredLevel
+          }"
+          class="btn btn-block m-t-40"
+          (click)="resetRatingsFilter()"
+        >
+          Clear Ratings Filter</button
+        ><button
+          class="btn btn-block btn-dark m-t-40 m-b-60"
+          (click)="resetAllFilters()"
+        >
+          Reset All Filters
+        </button>
+      </div>
+      <div class="col-md-9 right-side">
+        <p class="title m-t-10">
+          <span *ngIf="!genreFilteredName">Current Movies</span>
+          <span *ngIf="genreFilteredName">{{ genreFilteredName }} Movies </span>
+          <span *ngIf="!genreTerm"> ({{ filmArray.length }}) </span>
+          <span *ngIf="movieRatingFilteredLevel">
+            - Rating {{ movieRatingFilteredLevel }}</span
+          >
+          <span *ngIf="genreTerm"> - Filtering: {{ genreTerm }}</span>
+        </p>
+        <div class="row row-movies row-eq-height">
+          <div
+            class="col-md-4 titles"
+            *ngFor="let movie of filmArray | filter: genreTerm; let i = index"
+          >
+            <div
+              class="title-header"
+              [ngStyle]="{
+                'background-image':
+                  'url(assets/images' + movie.backdrop_path + ')'
+              }"
+            ></div>
+            <div
+              class="list-group-item list-group-item-action flex-column align-items-start active"
+            >
+              <div class="movie-content">
+                <p class="title">{{ movie.title }}</p>
+
+                <div class="film-info">
+                  <span class="bold">Genre:</span
+                  ><span *ngFor="let genre of filmArray[i].genre">
+                    {{ genre }}
+                  </span>
+                </div>
+                <p class="film-info">
+                  <span class="bold">Original Title:</span>
+                  {{ movie.original_title }}
+                </p>
+                <p class="film-info">
+                  <span class="bold">Release Date:</span>
+                  {{ movie.release_date }}
+                </p>
+                <p class="film-info">
+                  <span class="bold">Vote Average:</span>
+                  {{ movie.vote_average }}
+                </p>
+                <p class="film-info">
+                  <span class="bold">Vote Count:</span> {{ movie.vote_count }}
+                </p>
+              </div>
+
+              <div class="movie-overview">
+                <p class="title">Overview</p>
+                <p class="film-content">{{ movie.overview }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <input type="hidden" #selection />
+</div>
+<router-outlet></router-outlet>
